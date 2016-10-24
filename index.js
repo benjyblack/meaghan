@@ -253,7 +253,7 @@ $(document).ready(function() {
     var HTML = "";
     shuffledArray.forEach(function(arrayItem){
       HTML +=
-        `<div class="card">
+        `<div class="card" data-meaning="${arrayItem.meaningOne}">
 	  		<div class="front">
 		  		<p>${arrayItem.color}</p>
 	  		</div>
@@ -283,11 +283,12 @@ $(document).ready(function() {
       $(this).addClass('clicked');
       if($(this).hasClass('clicked')){
         //need to store object into selectedArray array instead of text
-        var meaning = $('h2', this).text();
-        var itemsInArray = {meaning}
+        var meaning = $(this).attr('data-meaning');
+        console.log(`Adding ${meaning} to selected array`);
         selectedArray.push(meaning);
       }
     } else{
+      console.log('3 cards have been chosen, will show meanings now');
       // clear other cards
       var cards = $('.card');
       if($(this).hasClass('clicked')){
