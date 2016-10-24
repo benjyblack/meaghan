@@ -253,7 +253,7 @@ $(document).ready(function() {
     var HTML = "";
     shuffledArray.forEach(function(arrayItem){
       HTML +=
-        `<div class="card" data-meaning="${arrayItem.meaningOne}">
+        `<div class="card" data-age="${arrayItem.age}">
 	  		<div class="front">
 		  		<p>${arrayItem.color}</p>
 	  		</div>
@@ -276,47 +276,50 @@ $(document).ready(function() {
   //Have the user pick 3 options - push the objects into a new array
   var selectedArray = [];
 
-  // console.log(selectedArray);
   $('.container .card').on('click', function() {
-    //counter
-    if(selectedArray.length < 3){
+    if (selectedArray.length >= 3) {
+      console.log('3 items already chosen, returning');
+      return;
+    } else {
       $(this).addClass('clicked');
-      if($(this).hasClass('clicked')){
-        //need to store object into selectedArray array instead of text
-        var meaning = $(this).attr('data-meaning');
 
-        if (!selectedArray.includes(meaning)) {
-          console.log(`Adding ${meaning} to selected array`);
-          selectedArray.push(meaning);
-        } else {
-          console.log(`Array already contains ${meaning}, will not add again`);
-        }
+      var clickedCardAge = $(this).attr('data-age');
+      // Find the clicked card in our list
+      var associatedCard = colors.find(function (color) {
+        return color.age === clickedCardAge;
+      });
 
-      }
-    } else{
-      console.log('3 cards have been chosen, will show meanings now');
-      // clear other cards
-      var cards = $('.card');
-      if($(this).hasClass('clicked')){
-      } else{
-        cards.fadeOut();
+      // Only add if not already added
+      if (!selectedArray.includes(associatedCard)) {
+        console.log(`Adding ${associatedCard} to selected array`);
+        selectedArray.push(associatedCard);
+      } else {
+        console.log(`Array already contains ${associatedCard}, will not add again`);
       }
 
-      setTimeout(function(){
-        $('.clicked').fadeIn().addClass('reverse').css('top', '120px');
-      }, 1500);
+      // 3 cards have been chosen?
+      if (selectedArray.length === 3) {
+        console.log('3 cards have been chosen, will show meanings now');
+
+        // clear all cards
+        $('.card').fadeOut();
+        giveCardReading(selectedArray);
+      }
     }
 
     $('button.shuffle').css('display', 'none');
     console.log(selectedArray);
   });
 
-  console.log(selectedArray[0]);
-  giveCardReading(selectedArray);
   function giveCardReading(selectedArray){
-    $('meaning-container').append(selectedArray[0]);
-
-    // $('.meaning-container').append(eachMeaning);
-    // console.log(eachMeaning);
+    // add each card from selected array, with the given meanings
+    selectedArray.forEach(function(arrayItem) {
+      $('.container').append(`<div class="card"">
+	  		<div class="front">
+		  		<p>${arrayItem.meaningOne}</p>
+	  		</div>
+	  	</div>
+	  	`);
+    });
   }
 });
