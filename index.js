@@ -284,8 +284,14 @@ $(document).ready(function() {
       if($(this).hasClass('clicked')){
         //need to store object into selectedArray array instead of text
         var meaning = $(this).attr('data-meaning');
-        console.log(`Adding ${meaning} to selected array`);
-        selectedArray.push(meaning);
+
+        if (!selectedArray.includes(meaning)) {
+          console.log(`Adding ${meaning} to selected array`);
+          selectedArray.push(meaning);
+        } else {
+          console.log(`Array already contains ${meaning}, will not add again`);
+        }
+
       }
     } else{
       console.log('3 cards have been chosen, will show meanings now');
